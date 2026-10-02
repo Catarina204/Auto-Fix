@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AutoFix - Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            width: 350px;
+
+            background-color: white;
+
+            padding: 30px;
+
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-area h1 {
+            color: #222;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .logo-area p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 6px;
+
+            color: #333;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #ccc;
+            border-radius: 5px;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #dc2626;
+        }
+
+        .btn-login {
+            width: 100%;
+
+            padding: 11px;
+
+            border: none;
+            border-radius: 5px;
+
+            background-color: #dc2626;
+            color: white;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .btn-login:hover {
+            background-color: #b91c1c;
+        }
+
+        .mensagem-erro {
+            display: none;
+
+            margin-bottom: 15px;
+            padding: 10px;
+
+            background-color: #fee2e2;
+            color: #b91c1c;
+
+            border: 1px solid #fca5a5;
+            border-radius: 5px;
+
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="login-card">
+
+        <div class="logo-area">
+            <h1>AutoFix</h1>
+
+            <p>Sistema de Gestão da Oficina</p>
+        </div>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+                <label for="login">Login</label>
+
+                <input
+                    type="text"
+                    id="login"
+                    name="login"
+                    placeholder="Digite seu login"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha</label>
+
+                <input
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    placeholder="Digite sua senha"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <div id="mensagemErro" class="mensagem-erro"></div>
+
+            <button type="submit" class="btn-login">
+                Entrar
+            </button>
+
+        </form>
+
+    </main>
+
+    <script>
+
+        const loginForm = document.getElementById("loginForm");
+        const mensagemErro = document.getElementById("mensagemErro");
+
+        loginForm.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const login = document.getElementById("login").value.trim();
+            const senha = document.getElementById("senha").value.trim();
+
+            mensagemErro.style.display = "none";
+            mensagemErro.textContent = "";
+
+            if (login === "" || senha === "") {
+
+                mensagemErro.textContent = "Preencha o login e a senha.";
+
+                mensagemErro.style.display = "block";
+
+                return;
+            }
+
+            console.log("Dados preenchidos.");
+
+        });
+
+    </script>
+
+</body>
+
+</html>

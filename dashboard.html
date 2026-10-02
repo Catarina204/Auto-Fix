@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AutoFix - Dashboard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+
+
+        header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #ddd;
+
+            padding: 15px 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #dc2626;
+        }
+
+        .menu {
+            display: flex;
+            gap: 10px;
+        }
+
+        .menu a {
+            text-decoration: none;
+
+            color: #333;
+
+            padding: 8px 12px;
+
+            border-radius: 5px;
+
+            font-size: 14px;
+        }
+
+        .menu a:hover {
+            background-color: #f3f4f6;
+        }
+
+        .btn-sair {
+            color: #dc2626 !important;
+        }
+
+
+        main {
+            padding: 30px;
+        }
+
+        .boas-vindas {
+            margin-bottom: 25px;
+        }
+
+        .boas-vindas h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .boas-vindas p {
+            color: #777;
+        }
+
+
+        .cards {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 20px;
+
+            max-width: 900px;
+        }
+
+        .card {
+            background-color: white;
+
+            padding: 25px;
+
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .card a {
+            display: inline-block;
+
+            text-decoration: none;
+
+            background-color: #dc2626;
+            color: white;
+
+            padding: 9px 15px;
+
+            border-radius: 5px;
+
+            font-size: 14px;
+        }
+
+        .card a:hover {
+            background-color: #b91c1c;
+        }
+
+        @media (max-width: 700px) {
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            main {
+                padding: 20px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+    <header>
+
+        <div class="logo">
+            AutoFix
+        </div>
+
+        <nav class="menu">
+
+            <a href="clientes.html">
+                Clientes
+            </a>
+
+            <a href="veiculos.html">
+                Veículos
+            </a>
+
+            <a href="ordens.html">
+                Ordens de Serviço
+            </a>
+
+            <a href="index.html" class="btn-sair">
+                Sair
+            </a>
+
+        </nav>
+
+    </header>
+
+    <main>
+
+        <section class="boas-vindas">
+
+            <h1>
+                Olá, <span id="nomeUsuario">Usuário</span>!
+            </h1>
+
+            <p>
+                Bem-vindo ao sistema de gestão da AutoFix.
+            </p>
+
+        </section>
+
+
+        <section class="cards">
+
+            <div class="card">
+
+                <h2>Clientes</h2>
+
+                <p>
+                    Cadastre, edite, exclua e consulte os clientes
+                    da oficina.
+                </p>
+
+                <a href="clientes.html">
+                    Acessar
+                </a>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>Veículos</h2>
+
+                <p>
+                    Gerencie os veículos cadastrados e seus
+                    respectivos proprietários.
+                </p>
+
+                <a href="veiculos.html">
+                    Acessar
+                </a>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>Ordens de Serviço</h2>
+
+                <p>
+                    Cadastre e consulte as ordens de serviço
+                    da oficina.
+                </p>
+
+                <a href="ordens.html">
+                    Acessar
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        const nomeUsuario = "Usuário";
+
+        document.getElementById("nomeUsuario").textContent = nomeUsuario;
+
+    </script>
+
+</body>
+
+</html>
