@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AutoFix - Ordens de Serviço</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+
+        header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #ddd;
+
+            padding: 15px 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #dc2626;
+        }
+
+        .menu {
+            display: flex;
+            gap: 10px;
+        }
+
+        .menu a {
+            text-decoration: none;
+
+            color: #333;
+
+            padding: 8px 12px;
+
+            border-radius: 5px;
+
+            font-size: 14px;
+        }
+
+        .menu a:hover {
+            background-color: #f3f4f6;
+        }
+
+        .btn-sair {
+            color: #dc2626 !important;
+        }
+
+        main {
+            padding: 30px;
+        }
+
+        .titulo {
+            margin-bottom: 25px;
+        }
+
+        .titulo h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .titulo p {
+            color: #777;
+        }
+
+        .formulario {
+            background-color: white;
+
+            padding: 25px;
+
+            border: 1px solid #ddd;
+            border-radius: 8px;
+
+            max-width: 1000px;
+
+            margin-bottom: 25px;
+        }
+
+        .formulario h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 6px;
+
+            color: #333;
+
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #ccc;
+            border-radius: 5px;
+
+            font-size: 14px;
+
+            outline: none;
+
+            background-color: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #dc2626;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+
+            resize: vertical;
+
+            font-family: Arial, sans-serif;
+        }
+
+        .campo-completo {
+            grid-column: 1 / 3;
+        }
+
+        .botoes {
+            margin-top: 20px;
+
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+
+            border: none;
+            border-radius: 5px;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .btn-salvar {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .btn-salvar:hover {
+            background-color: #b91c1c;
+        }
+
+        .btn-cancelar {
+            background-color: #e5e7eb;
+            color: #333;
+
+            display: none;
+        }
+
+        .btn-cancelar:hover {
+            background-color: #d1d5db;
+        }
+
+        .mensagem {
+            display: none;
+
+            max-width: 1000px;
+
+            margin-bottom: 20px;
+
+            padding: 10px;
+
+            border-radius: 5px;
+
+            font-size: 14px;
+        }
+
+        .mensagem-sucesso {
+            display: block;
+
+            background-color: #dcfce7;
+            color: #166534;
+
+            border: 1px solid #86efac;
+        }
+
+        .mensagem-erro {
+            display: block;
+
+            background-color: #fee2e2;
+            color: #b91c1c;
+
+            border: 1px solid #fca5a5;
+        }
+
+        .lista {
+            background-color: white;
+
+            padding: 25px;
+
+            border: 1px solid #ddd;
+            border-radius: 8px;
+
+            max-width: 1400px;
+        }
+
+        .lista-header {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 20px;
+        }
+
+        .lista-header h2 {
+            font-size: 18px;
+        }
+
+        .busca {
+            width: 350px;
+
+            padding: 10px;
+
+            border: 1px solid #ccc;
+            border-radius: 5px;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        .busca:focus {
+            border-color: #dc2626;
+        }
+
+        .tabela {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            font-size: 14px;
+        }
+
+        .tabela th {
+            background-color: #f9fafb;
+
+            text-align: left;
+
+            padding: 12px;
+
+            border-bottom: 1px solid #ddd;
+
+            white-space: nowrap;
+        }
+
+        .tabela td {
+            padding: 12px;
+
+            border-bottom: 1px solid #eee;
+
+            vertical-align: top;
+        }
+
+        .tabela tr:hover {
+            background-color: #fafafa;
+        }
+
+        .acoes {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-editar {
+            background-color: #2563eb;
+            color: white;
+
+            border: none;
+            border-radius: 4px;
+
+            padding: 7px 10px;
+
+            cursor: pointer;
+        }
+
+        .btn-editar:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-excluir {
+            background-color: #dc2626;
+            color: white;
+
+            border: none;
+            border-radius: 4px;
+
+            padding: 7px 10px;
+
+            cursor: pointer;
+        }
+
+        .btn-excluir:hover {
+            background-color: #b91c1c;
+        }
+
+        .nenhuma-os {
+            text-align: center;
+
+            color: #777;
+
+            padding: 25px;
+        }
+
+        .status {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 15px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+        .status-aberta {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-andamento {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-finalizada {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .status-cancelada {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .aviso {
+            margin-top: 10px;
+
+            padding: 10px;
+
+            background-color: #fff7ed;
+
+            color: #9a3412;
+
+            border: 1px solid #fdba74;
+
+            border-radius: 5px;
+
+            font-size: 13px;
+        }
+
+        @media (max-width: 800px) {
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            main {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .campo-completo {
+                grid-column: auto;
+            }
+
+            .lista-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .busca {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">
+            AutoFix
+        </div>
+
+        <nav class="menu">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="clientes.html">
+                Clientes
+            </a>
+
+            <a href="veiculos.html">
+                Veículos
+            </a>
+
+            <a href="ordens.html">
+                Ordens de Serviço
+            </a>
+
+            <a href="index.html" class="btn-sair">
+                Sair
+            </a>
+
+        </nav>
+
+    </header>
+
+    <main>
+
+        <section class="titulo">
+
+            <h1>
+                Ordens de Serviço
+            </h1>
+
+            <p>
+                Cadastre e consulte as ordens de serviço da oficina.
+            </p>
+
+        </section>
+
+        <div id="mensagem" class="mensagem"></div>
+
+        <section class="formulario">
+
+            <h2 id="tituloFormulario">
+                Cadastrar Ordem de Serviço
+            </h2>
+
+            <form id="ordemForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label for="cliente">
+                            Cliente
+                        </label>
+
+                        <select id="cliente" required>
+
+                            <option value="">
+                                Selecione um cliente
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="veiculo">
+                            Veículo
+                        </label>
+
+                        <select id="veiculo" required>
+
+                            <option value="">
+                                Selecione um veículo
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="data">
+                            Data da manutenção / abertura
+                        </label>
+
+                        <input
+                            type="date"
+                            id="data"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="status">
+                            Status
+                        </label>
+
+                        <select id="status" required>
+
+                            <option value="">
+                                Selecione o status
+                            </option>
+
+                            <option value="Aberta">
+                                Aberta
+                            </option>
+
+                            <option value="Em andamento">
+                                Em andamento
+                            </option>
+
+                            <option value="Finalizada">
+                                Finalizada
+                            </option>
+
+                            <option value="Cancelada">
+                                Cancelada
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="valor">
+                            Valor do serviço
+                        </label>
+
+                        <input
+                            type="number"
+                            id="valor"
+                            placeholder="Digite o valor"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group campo-completo">
+
+                        <label for="descricao">
+                            Descrição do serviço
+                        </label>
+
+                        <textarea
+                            id="descricao"
+                            placeholder="Descreva os serviços realizados ou que serão realizados..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+                <div id="aviso" class="aviso">
+                    Para cadastrar uma ordem de serviço, é necessário possuir clientes e veículos cadastrados.
+                </div>
+
+                <div class="botoes">
+
+                    <button
+                        type="submit"
+                        class="btn btn-salvar"
+                        id="btnSalvar"
+                    >
+                        Cadastrar Ordem de Serviço
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-cancelar"
+                        id="btnCancelar"
+                    >
+                        Cancelar
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <section class="lista">
+
+            <div class="lista-header">
+
+                <h2>
+                    Ordens de Serviço cadastradas
+                </h2>
+
+                <input
+                    type="text"
+                    id="busca"
+                    class="busca"
+                    placeholder="Buscar por cliente, placa ou modelo..."
+                >
+
+            </div>
+
+            <div style="overflow-x: auto;">
+
+                <table class="tabela">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Nº OS
+                            </th>
+
+                            <th>
+                                Data
+                            </th>
+
+                            <th>
+                                Cliente
+                            </th>
+
+                            <th>
+                                Veículo
+                            </th>
+
+                            <th>
+                                Placa
+                            </th>
+
+                            <th>
+                                Serviço
+                            </th>
+
+                            <th>
+                                Valor
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Ações
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tabelaOrdens">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+
+        const ordemForm =
+            document.getElementById("ordemForm");
+
+        const tabelaOrdens =
+            document.getElementById("tabelaOrdens");
+
+        const busca =
+            document.getElementById("busca");
+
+        const mensagem =
+            document.getElementById("mensagem");
+
+        const tituloFormulario =
+            document.getElementById("tituloFormulario");
+
+        const btnSalvar =
+            document.getElementById("btnSalvar");
+
+        const btnCancelar =
+            document.getElementById("btnCancelar");
+
+        const selectCliente =
+            document.getElementById("cliente");
+
+        const selectVeiculo =
+            document.getElementById("veiculo");
+
+        const aviso =
+            document.getElementById("aviso");
+
+
+        let clientes =
+            JSON.parse(
+                localStorage.getItem("clientes")
+            ) || [];
+
+
+        let veiculos =
+            JSON.parse(
+                localStorage.getItem("veiculos")
+            ) || [];
+
+
+        let ordens =
+            JSON.parse(
+                localStorage.getItem("ordens")
+            ) || [];
+
+
+        let ordemEditando = null;
+
+
+        /*
+         * CARREGAR CLIENTES
+         */
+
+        function carregarClientes() {
+
+            clientes =
+                JSON.parse(
+                    localStorage.getItem("clientes")
+                ) || [];
+
+
+            selectCliente.innerHTML = `
+
+                <option value="">
+                    Selecione um cliente
+                </option>
+
+            `;
+
+
+            clientes.forEach(
+                function(cliente) {
+
+                    const option =
+                        document.createElement("option");
+
+
+                    option.value =
+                        cliente.id;
+
+
+                    option.textContent =
+                        cliente.nome +
+                        " - CPF: " +
+                        cliente.cpf;
+
+
+                    selectCliente.appendChild(option);
+
+                }
+            );
+
+        }
+
+
+        /*
+         * CARREGAR VEÍCULOS
+         */
+
+        function carregarVeiculos() {
+
+            veiculos =
+                JSON.parse(
+                    localStorage.getItem("veiculos")
+                ) || [];
+
+
+            selectVeiculo.innerHTML = `
+
+                <option value="">
+                    Selecione um veículo
+                </option>
+
+            `;
+
+
+            const clienteId =
+                Number(selectCliente.value);
+
+
+            if (!clienteId) {
+
+                return;
+
+            }
+
+
+            const veiculosCliente =
+                veiculos.filter(
+                    function(veiculo) {
+
+                        return (
+                            Number(
+                                veiculo.clienteId
+                            ) === clienteId
+                        );
+
+                    }
+                );
+
+
+            veiculosCliente.forEach(
+                function(veiculo) {
+
+                    const option =
+                        document.createElement("option");
+
+
+                    option.value =
+                        veiculo.id;
+
+
+                    option.textContent =
+                        veiculo.placa +
+                        " - " +
+                        veiculo.marca +
+                        " " +
+                        veiculo.modelo +
+                        " (" +
+                        veiculo.ano +
+                        ")";
+
+
+                    selectVeiculo.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+            if (
+                veiculosCliente.length === 0
+            ) {
+
+                const option =
+                    document.createElement("option");
+
+
+                option.value = "";
+
+
+                option.textContent =
+                    "Este cliente não possui veículos";
+
+
+                selectVeiculo.appendChild(
+                    option
+                );
+
+            }
+
+        }
+
+
+        /*
+         * ALTERAR CLIENTE
+         */
+
+        selectCliente.addEventListener(
+            "change",
+            function() {
+
+                selectVeiculo.value =
+                    "";
+
+                carregarVeiculos();
+
+            }
+        );
+
+
+        /*
+         * CADASTRAR OU EDITAR OS
+         */
+
+        ordemForm.addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+
+                const clienteId =
+                    Number(
+                        selectCliente.value
+                    );
+
+
+                const veiculoId =
+                    Number(
+                        selectVeiculo.value
+                    );
+
+
+                const data =
+                    document.getElementById("data")
+                    .value;
+
+
+                const status =
+                    document.getElementById("status")
+                    .value;
+
+
+                const valor =
+                    document.getElementById("valor")
+                    .value;
+
+
+                const descricao =
+                    document.getElementById("descricao")
+                    .value
+                    .trim();
+
+
+                if (!clienteId) {
+
+                    mostrarMensagem(
+                        "Selecione um cliente.",
+                        "erro"
+                    );
+
+                    return;
+
+                }
+
+
+                if (!veiculoId) {
+
+                    mostrarMensagem(
+                        "Selecione um veículo.",
+                        "erro"
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    data === "" ||
+                    status === "" ||
+                    valor === "" ||
+                    descricao === ""
+                ) {
+
+                    mostrarMensagem(
+                        "Preencha todos os campos da ordem de serviço.",
+                        "erro"
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                 * EDITAR OS
+                 */
+
+                if (
+                    ordemEditando !== null
+                ) {
+
+                    const ordem =
+                        ordens.find(
+                            function(ordem) {
+
+                                return (
+                                    ordem.id ===
+                                    ordemEditando
+                                );
+
+                            }
+                        );
+
+
+                    if (ordem) {
+
+                        ordem.clienteId =
+                            clienteId;
+
+                        ordem.veiculoId =
+                            veiculoId;
+
+                        ordem.data =
+                            data;
+
+                        ordem.status =
+                            status;
+
+                        ordem.valor =
+                            valor;
+
+                        ordem.descricao =
+                            descricao;
+
+                    }
+
+
+                    mostrarMensagem(
+                        "Ordem de serviço atualizada com sucesso.",
+                        "sucesso"
+                    );
+
+                }
+
+
+                /*
+                 * CADASTRAR OS
+                 */
+
+                else {
+
+                    const novaOrdem = {
+
+                        id:
+                            gerarNovoId(),
+
+                        clienteId:
+                            clienteId,
+
+                        veiculoId:
+                            veiculoId,
+
+                        data:
+                            data,
+
+                        status:
+                            status,
+
+                        valor:
+                            valor,
+
+                        descricao:
+                            descricao
+
+                    };
+
+
+                    ordens.push(
+                        novaOrdem
+                    );
+
+
+                    mostrarMensagem(
+                        "Ordem de serviço cadastrada com sucesso.",
+                        "sucesso"
+                    );
+
+                }
+
+
+                localStorage.setItem(
+                    "ordens",
+                    JSON.stringify(ordens)
+                );
+
+
+                limparFormulario();
+
+                listarOrdens();
+
+            }
+        );
+
+
+        /*
+         * GERAR NOVO ID
+         */
+
+        function gerarNovoId() {
+
+            if (ordens.length === 0) {
+                return 1;
+            }
+
+
+            const ids =
+                ordens.map(
+                    function(ordem) {
+
+                        return ordem.id;
+
+                    }
+                );
+
+
+            return Math.max(...ids) + 1;
+
+        }
+
+
+        /*
+         * BUSCAR CLIENTE
+         */
+
+        function obterCliente(clienteId) {
+
+            return clientes.find(
+                function(cliente) {
+
+                    return (
+                        Number(cliente.id) ===
+                        Number(clienteId)
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+         * BUSCAR VEÍCULO
+         */
+
+        function obterVeiculo(veiculoId) {
+
+            return veiculos.find(
+                function(veiculo) {
+
+                    return (
+                        Number(veiculo.id) ===
+                        Number(veiculoId)
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+         * FORMATAR DATA
+         */
+
+        function formatarData(data) {
+
+            if (!data) {
+                return "-";
+            }
+
+
+            const partes =
+                data.split("-");
+
+
+            if (partes.length !== 3) {
+                return data;
+            }
+
+
+            return (
+                partes[2] +
+                "/" +
+                partes[1] +
+                "/" +
+                partes[0]
+            );
+
+        }
+
+
+        /*
+         * FORMATAR VALOR
+         */
+
+        function formatarValor(valor) {
+
+            return Number(valor).toLocaleString(
+                "pt-BR",
+                {
+                    style: "currency",
+                    currency: "BRL"
+                }
+            );
+
+        }
+
+
+        /*
+         * LISTAR ORDENS
+         */
+
+        function listarOrdens() {
+
+            clientes =
+                JSON.parse(
+                    localStorage.getItem("clientes")
+                ) || [];
+
+
+            veiculos =
+                JSON.parse(
+                    localStorage.getItem("veiculos")
+                ) || [];
+
+
+            ordens =
+                JSON.parse(
+                    localStorage.getItem("ordens")
+                ) || [];
+
+
+            const texto =
+                busca.value
+                .toLowerCase()
+                .trim();
+
+
+            tabelaOrdens.innerHTML =
+                "";
+
+
+            /*
+             * ORDENA POR DATA
+             * DA MAIS RECENTE PARA A MAIS ANTIGA
+             */
+
+            const ordensOrdenadas =
+                [...ordens].sort(
+                    function(a, b) {
+
+                        return (
+                            new Date(b.data) -
+                            new Date(a.data)
+                        );
+
+                    }
+                );
+
+
+            const ordensFiltradas =
+                ordensOrdenadas.filter(
+                    function(ordem) {
+
+                        const cliente =
+                            obterCliente(
+                                ordem.clienteId
+                            );
+
+
+                        const veiculo =
+                            obterVeiculo(
+                                ordem.veiculoId
+                            );
+
+
+                        const nomeCliente =
+                            cliente
+                                ? cliente.nome.toLowerCase()
+                                : "";
+
+
+                        const placa =
+                            veiculo
+                                ? veiculo.placa.toLowerCase()
+                                : "";
+
+
+                        const modelo =
+                            veiculo
+                                ? veiculo.modelo.toLowerCase()
+                                : "";
+
+
+                        return (
+
+                            nomeCliente.includes(
+                                texto
+                            )
+
+                            ||
+
+                            placa.includes(
+                                texto
+                            )
+
+                            ||
+
+                            modelo.includes(
+                                texto
+                            )
+
+                        );
+
+                    }
+                );
+
+
+            if (
+                ordensFiltradas.length === 0
+            ) {
+
+                tabelaOrdens.innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="9"
+                            class="nenhuma-os"
+                        >
+                            Nenhuma ordem de serviço encontrada.
+                        </td>
+
+                    </tr>
+
+                `;
+
+                return;
+
+            }
+
+
+            ordensFiltradas.forEach(
+                function(ordem) {
+
+                    const cliente =
+                        obterCliente(
+                            ordem.clienteId
+                        );
+
+
+                    const veiculo =
+                        obterVeiculo(
+                            ordem.veiculoId
+                        );
+
+
+                    const nomeCliente =
+                        cliente
+                            ? cliente.nome
+                            : "Cliente não encontrado";
+
+
+                    const nomeVeiculo =
+                        veiculo
+                            ? veiculo.marca +
+                              " " +
+                              veiculo.modelo
+                            : "Veículo não encontrado";
+
+
+                    const placa =
+                        veiculo
+                            ? veiculo.placa
+                            : "-";
+
+
+                    const linha =
+                        document.createElement("tr");
+
+
+                    linha.innerHTML = `
+
+                        <td>
+                            #${ordem.id}
+                        </td>
+
+                        <td>
+                            ${formatarData(
+                                ordem.data
+                            )}
+                        </td>
+
+                        <td>
+                            ${nomeCliente}
+                        </td>
+
+                        <td>
+                            ${nomeVeiculo}
+                        </td>
+
+                        <td>
+                            ${placa}
+                        </td>
+
+                        <td>
+                            ${ordem.descricao}
+                        </td>
+
+                        <td>
+                            ${formatarValor(
+                                ordem.valor
+                            )}
+                        </td>
+
+                        <td>
+                            ${criarStatus(
+                                ordem.status
+                            )}
+                        </td>
+
+                        <td>
+
+                            <div class="acoes">
+
+                                <button
+                                    class="btn-editar"
+                                    onclick="editarOrdem(${ordem.id})"
+                                >
+                                    Editar
+                                </button>
+
+                                <button
+                                    class="btn-excluir"
+                                    onclick="excluirOrdem(${ordem.id})"
+                                >
+                                    Excluir
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    `;
+
+
+                    tabelaOrdens.appendChild(
+                        linha
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+         * CRIAR STATUS VISUAL
+         */
+
+        function criarStatus(status) {
+
+            let classe =
+                "status";
+
+
+            if (
+                status === "Aberta"
+            ) {
+
+                classe +=
+                    " status-aberta";
+
+            }
+
+
+            if (
+                status === "Em andamento"
+            ) {
+
+                classe +=
+                    " status-andamento";
+
+            }
+
+
+            if (
+                status === "Finalizada"
+            ) {
+
+                classe +=
+                    " status-finalizada";
+
+            }
+
+
+            if (
+                status === "Cancelada"
+            ) {
+
+                classe +=
+                    " status-cancelada";
+
+            }
+
+
+            return `
+                <span class="${classe}">
+                    ${status}
+                </span>
+            `;
+
+        }
+
+
+        /*
+         * EDITAR ORDEM
+         */
+
+        function editarOrdem(id) {
+
+            const ordem =
+                ordens.find(
+                    function(ordem) {
+
+                        return ordem.id === id;
+
+                    }
+                );
+
+
+            if (!ordem) {
+                return;
+            }
+
+
+            carregarClientes();
+
+
+            selectCliente.value =
+                ordem.clienteId;
+
+
+            carregarVeiculos();
+
+
+            selectVeiculo.value =
+                ordem.veiculoId;
+
+
+            document.getElementById("data")
+                .value =
+                ordem.data;
+
+
+            document.getElementById("status")
+                .value =
+                ordem.status;
+
+
+            document.getElementById("valor")
+                .value =
+                ordem.valor;
+
+
+            document.getElementById("descricao")
+                .value =
+                ordem.descricao;
+
+
+            ordemEditando =
+                id;
+
+
+            tituloFormulario.textContent =
+                "Editar Ordem de Serviço";
+
+
+            btnSalvar.textContent =
+                "Salvar Alterações";
+
+
+            btnCancelar.style.display =
+                "inline-block";
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+
+        /*
+         * EXCLUIR ORDEM
+         */
+
+        function excluirOrdem(id) {
+
+            const ordem =
+                ordens.find(
+                    function(ordem) {
+
+                        return ordem.id === id;
+
+                    }
+                );
+
+
+            if (!ordem) {
+                return;
+            }
+
+
+            const confirmar =
+                confirm(
+                    "Deseja realmente excluir esta ordem de serviço?"
+                );
+
+
+            if (!confirmar) {
+                return;
+            }
+
+
+            ordens =
+                ordens.filter(
+                    function(ordem) {
+
+                        return ordem.id !== id;
+
+                    }
+                );
+
+
+            localStorage.setItem(
+                "ordens",
+                JSON.stringify(ordens)
+            );
+
+
+            listarOrdens();
+
+
+            mostrarMensagem(
+                "Ordem de serviço excluída com sucesso.",
+                "sucesso"
+            );
+
+        }
+
+
+        /*
+         * CANCELAR EDIÇÃO
+         */
+
+        btnCancelar.addEventListener(
+            "click",
+            function() {
+
+                limparFormulario();
+
+            }
+        );
+
+
+        /*
+         * LIMPAR FORMULÁRIO
+         */
+
+        function limparFormulario() {
+
+            ordemForm.reset();
+
+
+            ordemEditando =
+                null;
+
+
+            tituloFormulario.textContent =
+                "Cadastrar Ordem de Serviço";
+
+
+            btnSalvar.textContent =
+                "Cadastrar Ordem de Serviço";
+
+
+            btnCancelar.style.display =
+                "none";
+
+
+            carregarClientes();
+
+
+            selectVeiculo.innerHTML = `
+
+                <option value="">
+                    Selecione um veículo
+                </option>
+
+            `;
+
+        }
+
+
+        /*
+         * BUSCAR ORDENS
+         */
+
+        busca.addEventListener(
+            "input",
+            function() {
+
+                listarOrdens();
+
+            }
+        );
+
+
+        /*
+         * MOSTRAR MENSAGEM
+         */
+
+        function mostrarMensagem(
+            texto,
+            tipo
+        ) {
+
+            mensagem.textContent =
+                texto;
+
+
+            mensagem.className =
+                "mensagem";
+
+
+            if (
+                tipo === "sucesso"
+            ) {
+
+                mensagem.classList.add(
+                    "mensagem-sucesso"
+                );
+
+            }
+
+
+            if (
+                tipo === "erro"
+            ) {
+
+                mensagem.classList.add(
+                    "mensagem-erro"
+                );
+
+            }
+
+
+            setTimeout(
+                function() {
+
+                    mensagem.className =
+                        "mensagem";
+
+                    mensagem.textContent =
+                        "";
+
+                },
+                3000
+            );
+
+        }
+
+
+        /*
+         * VERIFICAR SE EXISTEM
+         * CLIENTES E VEÍCULOS
+         */
+
+        function verificarDados() {
+
+            clientes =
+                JSON.parse(
+                    localStorage.getItem("clientes")
+                ) || [];
+
+
+            veiculos =
+                JSON.parse(
+                    localStorage.getItem("veiculos")
+                ) || [];
+
+
+            if (
+                clientes.length === 0 ||
+                veiculos.length === 0
+            ) {
+
+                aviso.style.display =
+                    "block";
+
+                btnSalvar.disabled =
+                    true;
+
+                btnSalvar.style.opacity =
+                    "0.5";
+
+                btnSalvar.style.cursor =
+                    "not-allowed";
+
+            }
+
+            else {
+
+                aviso.style.display =
+                    "none";
+
+                btnSalvar.disabled =
+                    false;
+
+                btnSalvar.style.opacity =
+                    "1";
+
+                btnSalvar.style.cursor =
+                    "pointer";
+
+            }
+
+        }
+
+
+        /*
+         * INICIALIZAÇÃO
+         */
+
+        carregarClientes();
+
+        listarOrdens();
+
+        verificarDados();
+
+    </script>
+
+</body>
+
+</html>
